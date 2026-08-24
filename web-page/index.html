@@ -1,0 +1,273 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="UCAG-P: unified camera-centric action geometry pre-training for heterogeneous embodied manipulation.">
+  <title>UCAG-P: One Policy, Many Embodiments</title>
+  <link rel="stylesheet" href="styles.css?v=20260824-transfer-spacing-v1">
+</head>
+<body>
+  <nav class="site-nav" aria-label="Primary navigation">
+    <a class="nav-brand" href="#top" aria-label="Technical Report: UCAG-P home"><small>Technical Report:</small><span>UCAG</span><b>-P</b></a>
+    <div class="nav-links">
+      <a href="#abstract">Abstract</a>
+      <a href="#transfer">Transfer</a>
+      <a href="#method">Method</a>
+      <a href="#results">Results</a>
+      <a href="#citation">Citation</a>
+    </div>
+    <div class="nav-institutions" aria-label="Affiliated institutions"><img class="nav-logo nav-logo-mi" src="assets/images/milogo.png" alt="Xiaomi logo"><img class="nav-logo nav-logo-centers" src="assets/images/cair-ISCT-merged.png" alt="CAIR, SKL-IOTSC, and University of Macau logos"></div>
+  </nav>
+  <header class="hero" id="top">
+    <video class="hero-media" autoplay muted loop playsinline preload="metadata" poster="posters/robot_execution.jpg" aria-hidden="true">
+      <source src="assets/videos/web/bread_robot_execution.mp4?v=20260823-hand-transform-bread" type="video/mp4">
+    </video>
+    <div class="hero-scrim" aria-hidden="true"></div>
+    <div class="hero-inner">
+      <p class="kicker"><span></span>Vision-language-action pre-training</p>
+      <h1><span class="logo-word title-acronym">UCAG-P</span><span class="title-rest">One Policy, Many Embodiments: Unified Camera-Centric Action Geometry Pre-training for Heterogeneous Embodied Manipulation</span></h1>
+      <p class="authors">Xiaomi Embodied Intelligence Team <span aria-hidden="true">&middot;</span> University of Macau | CAIR &amp; SKL-IOTSC</p>
+      <div class="resource-row" aria-label="Project resources">
+        <a href="https://arxiv.org/pdf/2608.26058" target="_blank" rel="noopener noreferrer"><i data-lucide="file-text" class="resource-icon" aria-hidden="true"></i>Paper</a>
+        <a href="https://github.com/Public-BOTs/UCAG-P" target="_blank" rel="noopener noreferrer"><svg class="resource-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .7a11.3 11.3 0 0 0-3.57 22.02c.57.1.77-.25.77-.55v-2.16c-3.14.68-3.8-1.34-3.8-1.34-.51-1.31-1.25-1.66-1.25-1.66-1.03-.7.08-.69.08-.69 1.13.08 1.73 1.17 1.73 1.17 1.01 1.73 2.65 1.23 3.3.94.1-.73.39-1.23.72-1.51-2.51-.29-5.15-1.26-5.15-5.59 0-1.23.44-2.24 1.16-3.03-.12-.29-.5-1.44.11-2.99 0 0 .95-.3 3.11 1.16A10.8 10.8 0 0 1 12 6.09c.96 0 1.92.13 2.82.38 2.16-1.46 3.1-1.16 3.1-1.16.62 1.55.23 2.7.12 2.99.72.79 1.16 1.8 1.16 3.03 0 4.34-2.65 5.3-5.17 5.58.41.35.77 1.04.77 2.1v3.16c0 .31.2.66.78.55A11.3 11.3 0 0 0 12 .7Z"/></svg>Code</a>
+        <a href="#method"><i data-lucide="workflow" class="resource-icon" aria-hidden="true"></i>Method</a>
+        <a href="#results"><i data-lucide="bar-chart-3" class="resource-icon" aria-hidden="true"></i>Results</a>
+        <a href="#citation"><i data-lucide="quote" class="resource-icon" aria-hidden="true"></i>BibTeX</a>
+      </div>
+      <a class="hero-scroll" href="#abstract"><span>Explore the work</span><i data-lucide="arrow-down" aria-hidden="true"></i></a>
+    </div>
+  </header>
+
+  <section class="scale-band" aria-label="Pre-training corpus at a glance">
+    <div class="scale-grid">
+      <div><strong>11</strong><span>datasets</span></div>
+      <div><strong>6,300+</strong><span>hours of demonstrations</span></div>
+      <div><strong>9</strong><span>embodiments</span></div>
+      <div><strong>1</strong><span>unified checkpoint</span></div>
+    </div>
+  </section>
+
+  <main>
+
+    <section class="abstract-band" id="abstract" aria-labelledby="abstract-title">
+      <div class="abstract-content">
+        <div class="abstract-copy">
+          <div class="abstract-visual">
+            <h2 id="abstract-title">Abstract</h2>
+            <figure class="abstract-figure">
+              <img src="assets/images/intro.png" alt="UCAG-P overview of shared camera-centric action geometry" decoding="async">
+              <figcaption>Camera-observable anchors provide a common geometric interface from demonstrations to execution.</figcaption>
+            </figure>
+          </div>
+
+          <p>Scaling generalist vision-language-action (VLA) policies is severely bottlenecked by the inherent heterogeneity of embodied data, which spans diverse robot morphologies, camera configurations, and low-level action spaces. Existing paradigms typically address this mismatch through explicit action retargeting, human-to-robot video synthesis, or dataset-specific adaptation branches, fundamentally hindering the joint learning of a unified policy. We introduce UCAG-P, a camera-centric unified action formulation that structurally aligns heterogeneous embodied datasets into a shared geometric action space. Rather than treating robot-specific commands as the shared policy target, UCAG-P represents manipulation through camera-observable anchor motion in image and camera-frame coordinates, treating robot arms, humanoids, and human hands as different embodiments of a common action schema. A geometry-conditioned action translator combines predicted motion with target-embodiment kinematics to produce executable controls. The resulting decoupled architecture allows a shared VLA policy to learn transferable manipulation geometry while retaining embodiment-specific controllability. UCAG-P is trained on 4.03K hours of robot and simulation data and 2.34K hours of human demonstrations. A single checkpoint reaches 98.3% on LIBERO, 88.7% and 89.2% on RoboTwin Easy and Hard, 82.0% zero-shot on LIBERO-Plus, and 62.0% on RoboCasa GR-1, without benchmark-specific fine-tuning.</p>
+
+        </div>
+      </div>
+    </section>
+
+    <section class="paper-figures" id="figures" aria-labelledby="figures-title">
+      <div class="paper-figures-inner">
+        <div class="section-intro figure-intro">
+          <p class="eyebrow">Paper at a glance</p>
+          <h2 id="figures-title">A shared geometric interface,<br>from data to execution.</h2>
+        </div>
+        <div class="paper-figure-stack">
+
+          <figure class="paper-figure">
+            <div class="figure-label"><span>SYSTEM OVERVIEW</span><strong>One policy, many embodiments</strong></div>
+            <img src="assets/images/UCAG-P-main.png" alt="UCAG-P unified camera-centric action geometry framework across heterogeneous embodiments" decoding="async">
+            <figcaption>Overview of UCAG-P for unified learning from heterogeneous manipulation data, spanning single-arm robots, bimanual robots, dexterous robotic hands, and human hands. UCAG-P maps their incompatible native action spaces into a shared camera-centric motion space defined by the 2D image and 3D camera-frame trajectories of wrist or end-effector and grasp center. A geometry-conditioned translator then combines the unified motion prediction with camera-to-base transforms, Jacobians, and robot state to produce embodiment-specific executable actions. This unified interface enables joint robot-human training and improves performance across LIBERO, LIBERO-Plus, RoboTwin, and RoboCasa GR-1.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+    <section class="simulation-benchmarks-band" aria-labelledby="simulation-benchmarks-title">
+      <div class="content">
+        <div class="simulation-panel">
+          <div class="benchmark-heading"><h3 id="simulation-benchmarks-title">Simulation benchmarks</h3><p>Success rate (%) &middot; one checkpoint &middot; no benchmark-specific post-training</p></div>
+          <div class="benchmark-metrics"><div class="benchmark-metric"><strong>98.3%</strong><span>LIBERO</span><small>Four task suites</small></div><div class="benchmark-metric"><strong>82.0%</strong><span>LIBERO-Plus</span><small>OOD robustness</small></div><div class="benchmark-metric"><strong>88.7%</strong><span>RoboTwin Easy</span><small>Bimanual</small></div><div class="benchmark-metric"><strong>89.2%</strong><span>RoboTwin Hard</span><small>Bimanual</small></div><div class="benchmark-metric"><strong>62.0%</strong><span>RoboCasa GR-1</span><small>29-DoF humanoid</small></div></div>
+        </div>
+      </div>
+    </section>
+    <section class="content shared-grid" id="data">
+      <figure class="shared-figure"><img src="assets/images/shared_space.png" alt="Shared camera-centric action space across robot and human embodiments" decoding="async"><figcaption>Human and robot motion are represented through visual grounding and spatial information in the camera frame.</figcaption></figure>
+      <div class="shared-copy"><p class="eyebrow">The shared space</p><h2>One geometric schema,<br>multiple bodies.</h2><p>Human demonstrations can directly supervise the shared policy because the action target is defined in the camera frame rather than in a robot-specific joint space.</p><ol><li><strong>Visual grounding</strong><span>Anchor points identify the manipulation geometry visible in the image.</span></li><li><strong>Spatial information</strong><span>Camera-frame coordinates preserve the 3D structure needed for translation.</span></li><li><strong>Embodiment translation</strong><span>Robot geometry turns the shared proposal into an executable command.</span></li></ol></div>
+    </section>
+
+    <section class="content intro-grid">
+      <div class="intro-copy">
+        <p class="eyebrow">The idea</p>
+        <h2>Put the shared target where<br>every embodiment can see it.</h2>
+        <p>We introduce <strong>UCAG-P</strong>, a camera-centric unified action formulation for heterogeneous embodied manipulation. Instead of using robot-specific commands as the shared target, UCAG-P represents manipulation through camera-observable anchor motion in image and camera-frame coordinates.</p>
+        <p>This formulation treats robot arms, humanoids, and human hands as different embodiments of a common action schema. A geometry-conditioned action translator then converts the shared prediction into the control representation required by the target robot.</p>
+      </div>
+      <figure class="teaser-figure"><img src="assets/images/problem_setup_hand_transform.png?v=20260823-hand-transform" alt="Camera-centric action anchors across heterogeneous embodiments" decoding="async"><figcaption>Camera-observable anchors provide a common geometric target across heterogeneous data.</figcaption></figure>
+    </section>
+
+    <section class="method-band" id="method">
+      <div class="content">
+        <div class="section-intro"><p class="eyebrow">The method</p><h2>Share the geometry.<br>Translate the execution.</h2><p>UCAG-P separates the representation that should be shared from the execution details that should remain embodiment-specific.</p></div>
+        <div class="architecture-wrap"><img class="architecture" src="assets/images/architecture.png" alt="UCAG-P model architecture" decoding="async"></div>
+        <div class="method-points">
+          <div><span>Stage 01</span><h3>Camera-centric specialization</h3><p>Train the VLM backbone and shared motion head on all robot and human samples with available geometric supervision, establishing p0/p1 anchor motion as the common action interface.</p></div>
+          <div><span>Stage 02</span><h3>Geometry-conditioned action translation</h3><p>Train the translator from ground-truth camera-frame trajectories, robot state, calibration, Jacobians, and executable labels, while masking inactive command dimensions.</p></div>
+          <div><span>Stage 03</span><h3>Joint robot-human training</h3><p>Jointly optimize the shared motion head and translator on mixed robot-human data, using policy-predicted trajectories so training matches inference-time execution.</p></div>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="transfer-band transfer-compact-after" id="transfer">
+      <div class="transfer-content">
+        <div class="section-intro transfer-intro">
+          <div class="transfer-meta">
+            <p class="eyebrow">Human-to-robot transfer</p>
+            <p class="playback-note"><i data-lucide="gauge" aria-hidden="true"></i><span>2&times; speed</span></p>
+          </div>
+          <h2>Different viewpoints.<br>One shared action geometry.</h2>
+          <p>Human demonstrations supervise camera-observable wrist and grasp-center motion. The policy learns this shared geometric target, while the action translator combines it with robot state, kinematics, and camera geometry to produce executable commands.</p>
+        </div>
+        <div class="transfer-case-heading bread-case-heading">
+          <span>Bread case</span>
+          <h3>Bread pickup through shared anchor motion</h3>
+        </div>
+        <div class="transfer-steps">
+          <article class="transfer-step">
+            <video data-autoplay controls muted loop playsinline preload="metadata" poster="posters/human_anchor_motion.jpg" aria-label="Bread human hand anchor motion">
+              <source src="assets/videos/web/bread_human_anchor_motion.mp4?v=20260823-hand-transform-bread" type="video/mp4">
+            </video>
+            <div class="transfer-step-copy"><span>01</span><h3>Extract shared supervision</h3><p>Hand landmarks define camera-observable wrist and grasp-center anchor motion.</p></div>
+          </article>
+          <article class="transfer-step">
+            <video data-autoplay controls muted loop playsinline preload="metadata" poster="posters/shared_action_geometry.jpg" aria-label="Shared camera-centric action geometry">
+              <source src="assets/videos/web/bread_shared_action_geometry.mp4?v=20260823-hand-transform-bread" type="video/mp4">
+            </video>
+            <div class="transfer-step-copy"><span>02</span><h3>Learn shared motion</h3><p>The policy predicts a shared action sequence in camera-centric coordinates.</p></div>
+          </article>
+          <article class="transfer-step">
+            <video data-autoplay controls muted loop playsinline preload="metadata" poster="posters/robot_execution.jpg" aria-label="Piper robot executing embodiment-specific commands">
+              <source src="assets/videos/web/bread_robot_execution.mp4?v=20260823-hand-transform-bread" type="video/mp4">
+            </video>
+            <div class="transfer-step-copy"><span>03</span><h3>Translate to robot control</h3><p>Robot state, kinematics, and camera geometry turn shared motion into executable commands.</p></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="transfer-band transfer-case-band transfer-compact-after" aria-labelledby="bowl-case-title">
+      <div class="transfer-content">
+        <div class="transfer-case-heading">
+          <span>Bowl case</span>
+          <h3 id="bowl-case-title">Bowl stacking through shared anchor motion</h3>
+        </div>
+        <div class="transfer-steps">
+          <article class="transfer-step">
+            <video data-autoplay controls muted loop playsinline preload="metadata" aria-label="Bowl human hand anchor motion">
+              <source src="assets/videos/web/bowl_human_anchor_motion.mp4?v=20260824-bowl-r-cleanup-v3" type="video/mp4">
+            </video>
+            <div class="transfer-step-copy"><span>01</span><h3>Human demonstration</h3><p>Track hand wrist and grasp-center anchors during bimanual bowl stacking.</p></div>
+          </article>
+          <article class="transfer-step">
+            <video data-autoplay controls muted loop playsinline preload="metadata" aria-label="Bowl shared action geometry">
+              <source src="assets/videos/web/bowl_shared_action_geometry.mp4?v=20260823-bowl-r-clear-15583-v5" type="video/mp4">
+            </video>
+            <div class="transfer-step-copy"><span>02</span><h3>Shared motion</h3><p>Represent bowl manipulation as synchronized camera-centric anchor geometry.</p></div>
+          </article>
+          <article class="transfer-step">
+            <video data-autoplay controls muted loop playsinline preload="metadata" aria-label="Bowl robot execution">
+              <source src="assets/videos/web/bowl_robot_execution.mp4?v=20260823-bowl-both-hands-v4" type="video/mp4">
+            </video>
+            <div class="transfer-step-copy"><span>03</span><h3>Robot execution</h3><p>Translate shared bowl motion into embodiment-specific robot commands.</p></div>
+          </article>
+        </div>
+      </div>
+    </section>    <section class="transfer-band transfer-case-band" aria-labelledby="blackboard-case-title">
+      <div class="transfer-content">
+        <div class="transfer-case-heading">
+          <span>Blackboard case</span>
+          <h3 id="blackboard-case-title">Erasing a blackboard through shared anchor motion</h3>
+        </div>
+        <div class="transfer-steps">
+          <article class="transfer-step">
+            <video data-autoplay controls muted loop playsinline preload="metadata" aria-label="Blackboard human hand anchor motion">
+              <source src="assets/videos/web/blackboard_human_anchor_motion.mp4?v=20260822" type="video/mp4">
+            </video>
+            <div class="transfer-step-copy"><span>01</span><h3>Human demonstration</h3><p>Track left- and right-hand wrist and grasp-center anchors during blackboard interaction.</p></div>
+          </article>
+          <article class="transfer-step">
+            <video data-autoplay controls muted loop playsinline preload="metadata" aria-label="Blackboard shared action geometry">
+              <source src="assets/videos/web/blackboard_shared_action_geometry.mp4?v=20260822" type="video/mp4">
+            </video>
+            <div class="transfer-step-copy"><span>02</span><h3>Shared motion</h3><p>Represent the observed hand trajectories as synchronized camera-centric anchor geometry.</p></div>
+          </article>
+          <article class="transfer-step">
+            <video data-autoplay controls muted loop playsinline preload="metadata" aria-label="Blackboard robot execution">
+              <source src="assets/videos/web/blackboard_robot_execution.mp4?v=20260822" type="video/mp4">
+            </video>
+            <div class="transfer-step-copy"><span>03</span><h3>Robot execution</h3><p>Translate the shared motion into embodiment-specific commands for the robot arm.</p></div>
+          </article>
+        </div>
+      </div>
+    </section>
+    <section class="media-stage" id="rollouts" aria-label="Real-world and simulation demonstrations">
+      <div class="media-stage-intro">
+        <p class="eyebrow">Qualitative rollouts</p>
+        <h2>One checkpoint,<br>many embodiments.</h2>
+        <p>Representative simulation and real-world executions across single-arm, bimanual, humanoid, and human-to-robot settings.</p>
+      </div>
+      <div class="media-grid">
+        <div class="media-group" aria-label="Simulation demonstrations">
+          <div class="media-row">
+            <figure><video class="simulation-video" data-autoplay controls muted loop playsinline preload="metadata" poster="posters/simulation_01.jpg" aria-label="LIBERO single-arm manipulation demonstration"><source src="assets/videos/simulation_01.mp4" type="video/mp4"></video><figcaption><strong>LIBERO</strong><span>Single-arm manipulation</span></figcaption></figure>
+            <figure><video class="simulation-video" data-autoplay controls muted loop playsinline preload="metadata" poster="posters/simulation_02.jpg" aria-label="RoboTwin bimanual manipulation demonstration"><source src="assets/videos/simulation_02.mp4?v=20260823-lift-pot" type="video/mp4"></video><figcaption><strong>RoboTwin 2.0</strong><span>Bimanual manipulation</span></figcaption></figure>
+            <figure><video class="simulation-video" data-autoplay controls muted loop playsinline preload="metadata" poster="posters/simulation_03.jpg" aria-label="RoboCasa GR-1 humanoid manipulation demonstration"><source src="assets/videos/web/simulation_03.mp4" type="video/mp4"></video><figcaption><strong>RoboCasa GR-1</strong><span>Humanoid control</span></figcaption></figure>
+          </div>
+        </div>
+        <div class="media-group" aria-label="Real-world demonstrations">
+          <div class="media-row media-row-four">
+            <figure><video data-autoplay controls muted loop playsinline preload="metadata" aria-label="Pen holder robot execution"><source src="assets/videos/web/pen_robot_execution.mp4?v=20260824-qualitative-rollout-v1" type="video/mp4"></video><figcaption><strong>Pen holder</strong><span>Robot execution</span></figcaption></figure>
+            <figure><video data-autoplay controls muted loop playsinline preload="metadata" poster="posters/piper_10.jpg" aria-label="Piper robot drawer opening demonstration"><source src="assets/videos/web/piper_10.mp4" type="video/mp4"></video><figcaption><strong>Drawer opening</strong><span>Real-world adaptation</span></figcaption></figure>
+            <figure><video data-autoplay controls muted loop playsinline preload="metadata" poster="posters/piper_1.jpg" aria-label="Piper robot bowl stacking demonstration"><source src="assets/videos/web/piper_1.mp4" type="video/mp4"></video><figcaption><strong>Bowl stacking</strong><span>Bimanual adaptation</span></figcaption></figure>
+            <figure><video data-autoplay controls muted loop playsinline preload="metadata" poster="posters/piper_17.jpg" aria-label="Piper robot bread pickup demonstration"><source src="assets/videos/web/piper17.mp4" type="video/mp4"></video><figcaption><strong>Bread pickup</strong><span>Human-to-robot transfer</span></figcaption></figure>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="results-band" id="results">
+      <div class="content">
+        <div class="section-intro results-intro"><p class="eyebrow">Evidence</p><h2>One checkpoint across<br>simulation and reality.</h2><p>We evaluate single-arm, bimanual, humanoid, out-of-distribution, cross-embodiment, and real-robot tasks.</p></div>
+        <figure class="paper-figure paper-figure-primary">
+            <div class="figure-label"><span>BENCHMARKS</span><strong>Performance across embodiments</strong></div>
+            <img src="assets/images/benchmark_panels.png" alt="UCAG-P benchmark performance panels across heterogeneous embodiments" decoding="async">
+          </figure>
+        <div class="results-dashboard">
+          <div class="real-panel"><h3>Real-world Piper tasks</h3><img src="assets/images/real_world_new.png" alt="Real-world Piper task success rates" decoding="async"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="content limits-grid">
+      <figure><img src="assets/images/failure_case.webp" alt="Failure case examples" decoding="async"><figcaption>Representative failure cases from anchor detection, trajectory prediction, and action translation.</figcaption></figure>
+      <div><p class="eyebrow">Limitations</p><h2>What remains<br>to be solved.</h2><p>Errors in camera calibration, depth estimation, embodiment kinematics, or hand-keypoint localization can propagate into the camera-centric target and downstream controller. Cross-embodiment transfer remains challenging, especially for contact-rich and articulated tasks.</p></div>
+    </section>
+
+    <section class="citation content" id="citation"><p class="eyebrow">Citation</p><h2>Cite UCAG-P.</h2><p class="citation-status">Public arXiv version: <a href="https://arxiv.org/abs/2608.26058" target="_blank" rel="noopener noreferrer">arXiv:2608.26058</a> (2026).</p><pre id="bibtex">@article{xu2026ucag-p,
+  title={One Policy, Many Embodiments: Unified Camera-Centric Action Geometry Pre-training for Heterogeneous Embodied Manipulation},
+  author={Shaoqing Xu and Fang Li and Guozhi Zhan and Zhixiang Duan and Yuhan Wang and Yuechen Luo and Shengyin Jiang and Hanbing Li and Zhiying Du and Longlong Wang and Longmei Jiang and Weixiang Liang and Ying Gong and Yong Pan and Ziping Zhao and Zhiyuan Chen and Yangwei You and Kun Ma and Qinyuan Liu and Hangjun Ye and Zhi-xin Yang},
+  journal={arXiv preprint arXiv:2608.26058},
+  year={2026}
+}</pre></section>
+  </main>
+
+  <footer>UCAG-P - Project page preview</footer>
+  <script src="assets/vendor/lucide.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
+
+
+

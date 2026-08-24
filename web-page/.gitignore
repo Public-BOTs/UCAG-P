@@ -1,0 +1,53 @@
+# Local caches, generation tools, and review artifacts
+.mpl-cache/
+piper_thumbs/
+sync_review/
+test-results/
+tools/
+piper_contact.jpg
+
+# Only publish images referenced by index.html
+assets/images/*
+!assets/images/architecture.png
+!assets/images/UCAG-P-main.png
+!assets/images/benchmark_panels.png
+!assets/images/failure_case.webp
+!assets/images/intro.png
+!assets/images/milogo.png
+!assets/images/cair-ISCT-merged.png
+!assets/images/problem_setup_hand_transform.png
+!assets/images/real_world_new.png
+!assets/images/shared_space.png
+
+# Only publish videos referenced by index.html
+assets/videos/*
+!assets/videos/simulation_01.mp4
+!assets/videos/simulation_02.mp4
+!assets/videos/web/
+assets/videos/web/*
+!assets/videos/web/blackboard_human_anchor_motion.mp4
+!assets/videos/web/blackboard_robot_execution.mp4
+!assets/videos/web/blackboard_shared_action_geometry.mp4
+!assets/videos/web/bread_human_anchor_motion.mp4
+!assets/videos/web/bread_shared_action_geometry.mp4
+!assets/videos/web/bread_robot_execution.mp4
+!assets/videos/web/bowl_human_anchor_motion.mp4
+!assets/videos/web/bowl_shared_action_geometry.mp4
+!assets/videos/web/bowl_robot_execution.mp4
+!assets/videos/web/pen_robot_execution.mp4
+!assets/videos/web/piper17.mp4
+!assets/videos/web/piper_1.mp4
+!assets/videos/web/piper_10.mp4
+!assets/videos/web/simulation_03.mp4
+
+# Only publish posters referenced by index.html or styles.css
+posters/*
+!posters/human_anchor_motion.jpg
+!posters/piper_1.jpg
+!posters/piper_10.jpg
+!posters/piper_17.jpg
+!posters/robot_execution.jpg
+!posters/shared_action_geometry.jpg
+!posters/simulation_01.jpg
+!posters/simulation_02.jpg
+!posters/simulation_03.jpg

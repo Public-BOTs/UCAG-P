@@ -1,0 +1,11 @@
+# Local caches and generated files
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+__pycache__/
+*.py[cod]
+.mpl-cache/
+.venv*/
+
+# Website-only local artifacts are handled by web-page/.gitignore.
